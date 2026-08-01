@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>Рассвет — путь к свободе</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#232854;
+    --night-2:#2d3468;
+    --dawn:#e8934a;
+    --dawn-soft:#f4b878;
+    --teal:#4f8a82;
+    --mist:#f4f5f8;
+    --card:#ffffff;
+    --ink:#22243b;
+    --ink-soft:#5a5d78;
+    --line:#e6e7ef;
+    --danger:#c9553f;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;padding:0;}
+  html,body{
+    background:var(--mist);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-tap-highlight-color:transparent;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  #app{
+    max-width:480px;
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--mist);
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  header.top{
+    background:linear-gradient(160deg,var(--night) 0%,var(--night-2) 55%,#3a3f7a 100%);
+    color:#fff;
+    padding:22px 20px 26px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:'';
+    position:absolute;
+    right:-40px; top:-40px;
+    width:160px; height:160px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(232,147,74,0.35) 0%,rgba(232,147,74,0) 70%);
+  }
+  .brand{
+    font-size:13px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--dawn-soft);
+    margin-bottom:4px;
+    font-weight:600;
+  }
+  .brand-title{
+    font-size:26px;
+    margin:0;
+  }
+  main{
+    flex:1;
+    padding:18px 16px 90px;
+  }
+  .view{display:none;}
+  .view.active{display:block; animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+
+  .card{
+    background:var(--card);
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:14px;
+    box-shadow:0 1px 2px rgba(35,40,84,0.06), 0 8px 24px -16px rgba(35,40,84,0.25);
+    border:1px solid var(--line);
+  }
+  .card h2{font-size:17px; margin:0 0 10px;}
+  .muted{color:var(--ink-soft); font-size:14px; line-height:1.5;}
+
+  .arc-wrap{display:flex; flex-direction:column; align-items:center; padding:6px 0 4px;}
+  svg.arc{width:220px; height:132px; overflow:visible;}
+  .arc-days{font-family:'Fraunces',serif; font-size:44px; font-weight:700; fill:var(--night); }
+  .arc-label{font-size:12px; fill:var(--ink-soft); letter-spacing:.06em; text-transform:uppercase;}
+  .milestone-row{display:flex; justify-content:space-between; font-size:12px; color:var(--ink-soft); margin-top:2px; padding:0 6px;}
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    border:none; border-radius:14px; padding:14px 18px;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:15px;
+    cursor:pointer; width:100%;
+    transition:transform .08s ease, filter .15s ease;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--night); color:#fff;}
+  .btn-dawn{background:var(--dawn); color:#fff;}
+  .btn-outline{background:transparent; color:var(--night); border:1.5px solid var(--line);}
+  .btn-danger{background:var(--danger); color:#fff;}
+  .btn-teal{background:var(--teal); color:#fff;}
+  .btn-sm{padding:9px 14px; font-size:13px; width:auto;}
+  .row-2{display:flex; gap:10px;}
+  .row-2 .btn{flex:1;}
+
+  .sos-hero{
+    background:linear-gradient(160deg,#c9553f 0%,#e8934a 100%);
+    color:#fff; text-align:center; padding:26px 20px; border-radius:18px; margin-bottom:16px;
+  }
+  .sos-hero p{margin:6px 0 16px; font-size:14px; opacity:.95;}
+  .breath-circle{
+    width:150px;height:150px;border-radius:50%;
+    margin:14px auto;
+    background:radial-gradient(circle at 40% 35%, #fff2 0%, #fff0 70%);
+    border:2.5px solid #fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px; font-weight:600; color:#fff;
+    transition:transform 4s ease-in-out;
+  }
+  .step-list{list-style:none; margin:0; padding:0;}
+  .step-list li{
+    display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--line);
+  }
+  .step-list li:last-child{border-bottom:none;}
+  .step-num{
+    flex:none; width:26px; height:26px; border-radius:50%;
+    background:var(--mist); color:var(--night); font-weight:700; font-size:13px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .halt-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;}
+  .halt-item{
+    border:1.5px solid var(--line); border-radius:12px; padding:12px; text-align:center;
+    cursor:pointer; font-size:13px; font-weight:600; color:var(--ink);
+    transition:all .15s ease;
+  }
+  .halt-item.selected{border-color:var(--dawn); background:#fdf1e6; color:var(--dawn);}
+
+  textarea, input[type=text]{
+    width:100%; border:1.5px solid var(--line); border-radius:12px;
+    padding:12px 14px; font-family:'Inter',sans-serif; font-size:14px;
+    resize:vertical; background:#fff; color:var(--ink);
+  }
+  textarea:focus, input:focus{outline:none; border-color:var(--dawn);}
+  label.field-label{font-size:13px; font-weight:600; color:var(--ink-soft); display:block; margin:12px 0 6px;}
+  label.field-label:first-child{margin-top:0;}
+
+  .entry{
+    border-left:3px solid var(--dawn); padding:10px 12px; margin-bottom:10px; background:var(--mist); border-radius:0 10px 10px 0;
+  }
+  .entry .meta{font-size:12px; color:var(--ink-soft); margin-bottom:4px;}
+  .entry .relapse-tag{color:var(--danger); font-weight:600;}
+
+  .article{margin-bottom:18px;}
+  .article h3{font-size:15.5px; margin:0 0 6px; color:var(--night);}
+  .article p{font-size:14px; line-height:1.6; color:var(--ink-soft); margin:0;}
+  .eyebrow{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); font-weight:700; margin-bottom:4px;}
+
+  nav.bottom{
+    position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+    width:100%; max-width:480px;
+    background:#fff; border-top:1px solid var(--line);
+    display:flex; padding:8px 4px calc(8px + env(safe-area-inset-bottom));
+    z-index:20;
+  }
+  nav.bottom button{
+    flex:1; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:3px;
+    padding:6px 2px; font-family:'Inter',sans-serif; font-size:10.5px; color:var(--ink-soft); cursor:pointer;
+  }
+  nav.bottom button.active{color:var(--dawn);}
+  nav.bottom svg{width:21px; height:21px;}
+
+  .quote-box{
+    background:linear-gradient(160deg,#fdf1e6,#fff);
+    border:1px solid #f3dcc0; border-radius:16px; padding:16px 18px; margin-bottom:14px;
+  }
+  .quote-box .eyebrow{color:var(--dawn);}
+  .quote-box p{font-family:'Fraunces',serif; font-size:16px; line-height:1.5; margin:0; color:var(--night); font-style:italic;}
+
+  .stat-row{display:flex; gap:10px;}
+  .stat{flex:1; text-align:center; padding:12px 6px; background:var(--mist); border-radius:12px;}
+  .stat .num{font-family:'Fraunces',serif; font-size:22px; font-weight:700; color:var(--night);}
+  .stat .lbl{font-size:11px; color:var(--ink-soft); margin-top:2px;}
+
+  .calendar-grid{display:grid; grid-template-columns:repeat(10,1fr); gap:4px; margin-top:10px;}
+  .cal-cell{aspect-ratio:1; border-radius:4px; background:var(--line);}
+  .cal-cell.ok{background:var(--teal);}
+  .cal-cell.relapse{background:var(--danger);}
+  .cal-cell.future{background:transparent;}
+
+  .modal-bg{
+    position:fixed; inset:0; background:rgba(20,22,42,0.55); z-index:50;
+    display:none; align-items:flex-end; justify-content:center;
+  }
+  .modal-bg.active{display:flex;}
+  .modal{
+    background:#fff; width:100%; max-width:480px; border-radius:22px 22px 0 0;
+    padding:24px 20px calc(24px + env(safe-area-inset-bottom)); max-height:85vh; overflow-y:auto;
+  }
+  .modal h2{margin-top:0;}
+  .close-x{float:right; background:var(--mist); border:none; width:30px; height:30px; border-radius:50%; font-size:16px; color:var(--ink-soft); cursor:pointer;}
+
+  .timer-num{font-family:'Fraunces',serif; font-size:52px; text-align:center; font-weight:700; color:var(--night); margin:6px 0;}
+
+  #toast{
+    position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--night); color:#fff; padding:10px 18px; border-radius:30px; font-size:13px;
+    opacity:0; pointer-events:none; transition:all .25s ease; z-index:60; max-width:80%; text-align:center;
+  }
+  #toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  /* Lock mode */
+  #lock-screen{
+    position:fixed; inset:0; z-index:200;
+    background:linear-gradient(160deg,#1b1f42 0%,#232854 45%,#3a2f52 100%);
+    color:#fff; display:none; flex-direction:column; align-items:center; justify-content:center;
+    padding:30px 26px; text-align:center;
+  }
+  #lock-screen.active{display:flex;}
+  #lock-screen .lock-eyebrow{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--dawn-soft); font-weight:700; margin-bottom:10px;}
+  #lock-screen .lock-timer{font-family:'Fraunces',serif; font-size:64px; font-weight:700; margin:6px 0 14px;}
+  #lock-screen .lock-message{font-size:16px; line-height:1.6; max-width:340px; margin:0 auto 22px; min-height:78px; font-family:'Fraunces',serif; font-style:italic;}
+  .lock-breath{
+    width:130px; height:130px; border-radius:50%; border:2px solid rgba(255,255,255,0.6);
+    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600;
+    margin-bottom:26px; transition:transform 4s ease-in-out;
+  }
+  .lock-progress-track{width:100%; max-width:300px; height:5px; background:rgba(255,255,255,0.18); border-radius:10px; overflow:hidden; margin-bottom:30px;}
+  .lock-progress-fill{height:100%; background:var(--dawn); width:0%; transition:width 1s linear;}
+  .lock-exit{background:none; border:none; color:rgba(255,255,255,0.55); font-size:12.5px; text-decoration:underline; cursor:pointer; padding:10px;}
+  .lock-done-icon{font-size:42px; margin-bottom:12px;}
+
+  ::selection{background:var(--dawn-soft);}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header class="top">
+    <div class="brand">Рассвет</div>
+    <h1 class="brand-title" id="header-title">С возвращением</h1>
+    <div class="muted" style="color:#cfd2ea; font-size:13px;" id="header-sub">Каждый день без срыва — это выбор, который вы делаете снова.</div>
+  </header>
+
+  <main>
+
+    <!-- DASHBOARD -->
+    <section class="view active" id="view-home">
+      <div class="card">
+        <div class="arc-wrap">
+          <svg class="arc" viewBox="0 0 220 140">
+            <path id="arc-bg" d="M 14 128 A 96 96 0 0 1 206 128" fill="none" stroke="#eceef4" stroke-width="14" stroke-linecap="round"/>
+            <path id="arc-fg" d="M 14 128 A 96 96 0 0 1 206 128" fill="none" stroke="url(#grad)" stroke-width="14" stroke-linecap="round" stroke-dasharray="302" stroke-dashoffset="302"/>
+            <defs>
+              <linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#232854"/>
+                <stop offset="100%" stop-color="#e8934a"/>
+              </linearGradient>
+            </defs>
+            <circle id="arc-sun" cx="14" cy="128" r="7" fill="#e8934a"/>
+            <text x="110" y="108" text-anchor="middle" class="arc-days" id="days-count">0</text>
+            <text x="110" y="126" text-anchor="middle" class="arc-label" id="days-label">дней подряд</text>
+          </svg>
+          <div class="milestone-row" style="width:220px;">
+            <span>0</span><span id="next-milestone-lbl">3 дня</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stat-row">
+          <div class="stat"><div class="num" id="stat-longest">0</div><div class="lbl">рекорд, дней</div></div>
+          <div class="stat"><div class="num" id="stat-entries">0</div><div class="lbl">записей в дневнике</div></div>
+          <div class="stat"><div class="num" id="stat-relapses">0</div><div class="lbl">срывов зафиксировано</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Последние 30 дней</h2>
+        <div class="calendar-grid" id="calendar-grid"></div>
+      </div>
+
+      <div class="quote-box">
+        <div class="eyebrow">Напоминание</div>
+        <p id="motivation-quote">«Тяга — это волна: она поднимается, достигает пика и всегда спадает — обычно за 15–20 минут, если вы просто её переждёте.»</p>
+      </div>
+
+      <div class="card" style="text-align:center;">
+        <h2 style="text-align:left;">Как прошёл день?</h2>
+        <div class="row-2">
+          <button class="btn btn-teal" onclick="goto('view-sos')">Чувствую тягу</button>
+          <button class="btn btn-outline" style="border-color:var(--danger); color:var(--danger);" onclick="openModal('modal-relapse')">Был срыв</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOS -->
+    <section class="view" id="view-sos">
+      <div class="sos-hero">
+        <div class="eyebrow" style="color:#ffe6d0;">Экстренная помощь</div>
+        <h2 style="color:#fff; margin:4px 0;">Тяга — это не приказ. Это ощущение.</h2>
+        <p>Она пройдёт сама, если вы дадите ей пройти. Начните с дыхания.</p>
+        <div class="breath-circle" id="breath-circle">Нажмите «Начать»</div>
+        <div class="row-2">
+          <button class="btn" style="background:#fff; color:var(--danger);" onclick="startBreathing()">Начать дыхание</button>
+          <button class="btn" style="background:rgba(255,255,255,0.18); color:#fff;" onclick="stopBreathing()">Стоп</button>
+        </div>
+      </div>
+
+      <div class="card" style="background:linear-gradient(160deg,#232854,#3a2f52); border:none;">
+        <h2 style="color:#fff;">🔒 Стоп-режим — 17 минут</h2>
+        <p class="muted" style="color:#cfd2ea;">Полноэкранный режим: экран приложения блокируется, обратный переход отключён, вас проведут через дыхание и переживание пика тяги от начала до конца. Выйти можно только осознанно.</p>
+        <button class="btn btn-danger" onclick="startLock()">Заблокировать сейчас</button>
+      </div>
+
+      <div class="card">
+        <h2>Правило 10 минут</h2>
+        <p class="muted">Отложите действие на 10 минут. Тяга к этому моменту почти всегда ослабнет. Уйдите из комнаты, если можете.</p>
+        <div class="timer-num" id="delay-timer">10:00</div>
+        <div class="row-2">
+          <button class="btn btn-dawn" id="delay-btn" onclick="toggleDelayTimer()">Запустить таймер</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Проверьте себя: HALT</h2>
+        <p class="muted">Тяга часто маскирует другую потребность. Что из этого сейчас правда?</p>
+        <div class="halt-grid">
+          <div class="halt-item" data-h="Голоден">🍽 Голоден</div>
+          <div class="halt-item" data-h="Злюсь / раздражён">😤 Злюсь</div>
+          <div class="halt-item" data-h="Одиноко">🌙 Одиноко</div>
+          <div class="halt-item" data-h="Устал">😴 Устал</div>
+        </div>
+        <div class="muted" style="margin-top:10px;" id="halt-hint"></div>
+      </div>
+
+      <div class="card">
+        <h2>Смените канал прямо сейчас</h2>
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div><strong>20 приседаний или отжиманий</strong><div class="muted">Резкая физическая нагрузка сбивает импульс и снижает возбуждение за 1–2 минуты.</div></div></li>
+          <li><div class="step-num">2</div><div><strong>Холодная вода на лицо / запястья</strong><div class="muted">Активирует парасимпатическую нервную систему, снижает интенсивность тяги.</div></div></li>
+          <li><div class="step-num">3</div><div><strong>Позвоните или напишите кому-то</strong><div class="muted">Социальный контакт — один из сильнейших способов прервать автоматическую цепочку привычки.</div></div></li>
+          <li><div class="step-num">4</div><div><strong>Выйдите на улицу на 5 минут</strong><div class="muted">Смена обстановки разрывает связь «триггер → место → действие».</div></div></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Запишите, что происходит</h2>
+        <p class="muted">Фиксация момента снижает его силу и помогает увидеть закономерности позже.</p>
+        <button class="btn btn-outline" onclick="openModal('modal-journal')">Открыть дневник</button>
+      </div>
+    </section>
+
+    <!-- JOURNAL -->
+    <section class="view" id="view-journal">
+      <div class="card">
+        <h2>Дневник триггеров</h2>
+        <p class="muted">Метод из когнитивно-поведенческой терапии: чем точнее вы фиксируете ситуацию, мысль и эмоцию — тем быстрее находите закономерности и слабые места привычки.</p>
+        <button class="btn btn-dawn" onclick="openModal('modal-journal')">+ Новая запись</button>
+      </div>
+      <div class="card" id="journal-list-card">
+        <h2>Последние записи</h2>
+        <div id="journal-list"><p class="muted">Записей пока нет.</p></div>
+      </div>
+    </section>
+
+    <!-- LEARN -->
+    <section class="view" id="view-learn">
+      <div class="card">
+        <div class="eyebrow">Наука</div>
+        <h2>Почему это работает так, а не иначе</h2>
+      </div>
+      <div class="card">
+        <div class="article">
+          <h3>Петля привычки</h3>
+          <p>Любая привычка держится на трёх звеньях: триггер (скука, стресс, одиночество, экран) → действие → вознаграждение (кратковременный выброс дофамина). Разорвать петлю проще всего не силой воли в моменте, а заменой звена «действие» на что-то другое сразу после триггера — именно на это и рассчитан режим SOS.</p>
+        </div>
+        <div class="article">
+          <h3>Дофамин и пресыщение</h3>
+          <p>Постоянная стимуляция высокой интенсивности снижает чувствительность дофаминовых рецепторов — тогда обычные радости (общение, еда, музыка) начинают ощущаться более тускло. Период без сверхстимуляции постепенно возвращает чувствительность к норме — это подтверждено исследованиями по нейропластичности вознаграждения.</p>
+        </div>
+        <div class="article">
+          <h3>Тяга — это волна, а не прямая линия</h3>
+          <p>В терапии принятия и ответственности (ACT) это называют urge surfing — «сёрфингом по тяге». Интенсивность желания растёт, достигает пика примерно на 10–20 минуте и затем спадает сама, даже без действия. Задача — не бороться, а просто наблюдать и переждать волну. Именно поэтому Стоп-режим длится 17 минут — это чуть больше среднего пика.</p>
+        </div>
+        <div class="article">
+          <h3>Почему отдельные ситуации опаснее других</h3>
+          <p>Усталость, стресс, скука, одиночество и алкоголь резко снижают способность к самоконтролю — не потому что вы слабы, а потому что префронтальная кора в этих состояниях работает хуже. Именно поэтому чек-лист HALT так эффективен: он ловит момент риска до того, как сработает автоматизм.</p>
+        </div>
+        <div class="article">
+          <h3>Сон, спорт и связи — три опоры</h3>
+          <p>Регулярный сон, физическая активность и живое общение — три фактора, наиболее устойчиво связанные с успешным преодолением компульсивных привычек в исследованиях по саморегуляции. Они не «дополнение», а основа: без них сила воли истощается быстрее.</p>
+        </div>
+        <div class="article">
+          <h3>Срыв — это данные, а не приговор</h3>
+          <p>Модель предотвращения рецидива (Marlatt) рассматривает срыв как ожидаемую часть процесса изменения, а не его провал. Важнее не то, что срыв случился, а что вы делаете в первые часы после: анализируете триггер или скатываетесь в стыд, который сам по себе повышает риск повторения.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ME -->
+    <section class="view" id="view-me">
+      <div class="card">
+        <h2>Мои причины</h2>
+        <p class="muted">Метод ценностей (ACT): когда тяга сильна, аргументы разума работают плохо, а личный смысл — работает. Опишите, ради чего вы это делаете.</p>
+        <textarea id="reasons-text" rows="5" placeholder="Например: хочу быть по-настоящему присутствующим в отношениях, вернуть концентрацию, уважать себя..."></textarea>
+        <button class="btn btn-dawn" style="margin-top:10px;" onclick="saveReasons()">Сохранить</button>
+      </div>
+
+      <div class="card">
+        <h2>Если нужна помощь извне</h2>
+        <p class="muted">Это приложение — инструмент самопомощи, а не замена специалисту, и оно не может гарантировать результат в одиночку. Если срывы повторяются, влияют на отношения, работу или настроение — обратиться к психологу, работающему с КПТ или компульсивным поведением, это не поражение, а следующий разумный шаг, который заметно повышает шансы на устойчивый результат.</p>
+        <p class="muted">Хорошие ориентиры для поиска: специалист по когнитивно-поведенческой терапии (КПТ) или терапии принятия и ответственности (ACT) с опытом работы с компульсивным сексуальным поведением.</p>
+      </div>
+
+      <div class="card">
+        <h2>Данные</h2>
+        <p class="muted">Весь прогресс хранится локально на этом устройстве, в этом браузере/приложении.</p>
+        <button class="btn btn-outline" style="color:var(--danger); border-color:var(--danger);" onclick="confirmReset()">Сбросить все данные</button>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="bottom">
+    <button data-view="view-home" class="active" onclick="goto('view-home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l8-8 8 8M6 10v10h12V10"/></svg>
+      Главная
+    </button>
+    <button data-view="view-sos" onclick="goto('view-sos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>
+      SOS
+    </button>
+    <button data-view="view-journal" onclick="goto('view-journal')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h7M9 13h7M9 17h4"/></svg>
+      Дневник
+    </button>
+    <button data-view="view-learn" onclick="goto('view-learn')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V6a2 2 0 012-2h5v17H6a2 2 0 01-2-2z"/><path d="M20 19V6a2 2 0 00-2-2h-5v17h5a2 2 0 002-2z"/></svg>
+      Знания
+    </button>
+    <button data-view="view-me" onclick="goto('view-me')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+      Я
+    </button>
+  </nav>
+</div>
+
+<!-- Modal: journal entry -->
+<div class="modal-bg" id="modal-journal">
+  <div class="modal">
+    <button class="close-x" onclick="closeModal('modal-journal')">✕</button>
+    <h2>Новая запись</h2>
+    <label class="field-label">Что произошло / где вы были?</label>
+    <textarea id="j-situation" rows="2" placeholder="Например: один дома вечером, листал ленту"></textarea>
+    <label class="field-label">О чём вы подумали в этот момент?</label>
+    <textarea id="j-thought" rows="2" placeholder="Например: «Всё равно никто не узнает»"></textarea>
+    <label class="field-label">Насколько сильной была тяга (1–10)?</label>
+    <input type="text" id="j-intensity" placeholder="например, 7">
+    <label class="field-label">Что вы сделали / собираетесь сделать вместо?</label>
+    <textarea id="j-action" rows="2" placeholder="Например: сделал 20 отжиманий и лёг спать"></textarea>
+    <button class="btn btn-dawn" style="margin-top:16px;" onclick="saveJournalEntry()">Сохранить запись</button>
+  </div>
+</div>
+
+<!-- Modal: relapse -->
+<div class="modal-bg" id="modal-relapse">
+  <div class="modal">
+    <button class="close-x" onclick="closeModal('modal-relapse')">✕</button>
+    <h2>Это тоже часть пути</h2>
+    <p class="muted">Срыв не обнуляет прогресс, который вы сделали в понимании себя — обнуляется только счётчик дней. Один срыв — это событие. Важно, что вы делаете дальше. Коротко: что предшествовало срыву?</p>
+    <textarea id="r-context" rows="3" placeholder="Что происходило до этого? Что чувствовали?"></textarea>
+    <button class="btn btn-danger" style="margin-top:14px;" onclick="logRelapse()">Зафиксировать и начать заново</button>
+  </div>
+</div>
+
+<!-- Lock mode fullscreen -->
+<div id="lock-screen">
+  <div id="lock-active-content">
+    <div class="lock-eyebrow">Стоп-режим</div>
+    <div class="lock-timer" id="lock-timer">17:00</div>
+    <div class="lock-breath" id="lock-breath">Дышите вместе со мной</div>
+    <div class="lock-message" id="lock-message">Тяга уже поднимается к пику. Это нормально и временно. Просто оставайтесь здесь.</div>
+    <div class="lock-progress-track"><div class="lock-progress-fill" id="lock-progress-fill"></div></div>
+    <button class="lock-exit" onclick="attemptExitLock()">Прервать досрочно</button>
+  </div>
+  <div id="lock-done-content" style="display:none;">
+    <div class="lock-done-icon">🌅</div>
+    <h2 style="color:#fff;">Вы прошли пик</h2>
+    <p class="lock-message" style="margin-bottom:26px;">17 минут позади. Тяга, с которой вы зашли сюда, физиологически уже не та, что была вначале — вы это сделали.</p>
+    <button class="btn btn-dawn" onclick="finishLock()">Вернуться в приложение</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+let DATA = {
+  streakStart: null,
+  longestStreak: 0,
+  relapseCount: 0,
+  journal: [],
+  reasons: "",
+  lockCompletions: 0
+};
+let loaded = false;
+const STORAGE_KEY = 'rassvet-data-v1';
+
+const quotes = [
+  "«Тяга — это волна: она поднимается, достигает пика и всегда спадает — обычно за 15–20 минут, если вы просто её переждёте.»",
+  "«Вы не боретесь с желанием силой воли — вы меняете звено \"действие\" в петле привычки.»",
+  "«Один срыв — это событие, а не приговор. Важно то, что вы делаете в следующие пять минут.»",
+  "«Скука, усталость и одиночество — не слабость. Это сигналы, которые стоит заметить раньше тяги.»",
+  "«Каждый день без действия по привычке — это буквально новая нейронная связь в вашу пользу.»"
+];
+
+// ---------- Storage: localStorage, работает и в браузере, и внутри APK-обёртки ----------
+function loadData(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      DATA = Object.assign(DATA, parsed);
+    }
+  }catch(e){
+    console.log('Локальное хранилище недоступно, данные не сохранятся между сессиями', e);
+  }
+  loaded = true;
+  if(!DATA.streakStart){
+    DATA.streakStart = new Date().toISOString();
+    persist();
+  }
+  render();
+}
+
+function persist(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+  }catch(e){
+    console.error('Ошибка сохранения', e);
+    showToast('Не удалось сохранить прогресс на этом устройстве');
+  }
+}
+
+function daysSince(dateStr){
+  if(!dateStr) return 0;
+  const start = new Date(dateStr);
+  const now = new Date();
+  const diff = Math.floor((now - start) / (1000*60*60*24));
+  return Math.max(0, diff);
+}
+
+const milestones = [3,7,14,30,60,90,180,365];
+function nextMilestone(d){
+  for(const m of milestones){ if(d < m) return m; }
+  return milestones[milestones.length-1];
+}
+function prevMilestone(d){
+  let p = 0;
+  for(const m of milestones){ if(d>=m) p=m; else break; }
+  return p;
+}
+
+function render(){
+  if(!loaded) return;
+  const days = daysSince(DATA.streakStart);
+  if(days > DATA.longestStreak){ DATA.longestStreak = days; persist(); }
+
+  document.getElementById('days-count').textContent = days;
+  document.getElementById('days-label').textContent = days===1 ? 'день подряд' : (days>=2&&days<=4 ? 'дня подряд' : 'дней подряд');
+  const nm = nextMilestone(days);
+  const pm = prevMilestone(days);
+  const range = nm - pm || 1;
+  const progress = Math.min(1, (days - pm) / range);
+  const circumference = 302;
+  const offset = circumference - (progress * circumference);
+  document.getElementById('arc-fg').setAttribute('stroke-dashoffset', offset);
+  document.getElementById('next-milestone-lbl').textContent = nm + ' дней';
+
+  const cx = 110, cy = 128, r = 96;
+  const angle = Math.PI - (progress * Math.PI);
+  const sunX = cx + r*Math.cos(angle);
+  const sunY = cy - r*Math.sin(angle);
+  document.getElementById('arc-sun').setAttribute('cx', sunX);
+  document.getElementById('arc-sun').setAttribute('cy', sunY);
+
+  document.getElementById('stat-longest').textContent = DATA.longestStreak;
+  document.getElementById('stat-entries').textContent = DATA.journal.length;
+  document.getElementById('stat-relapses').textContent = DATA.relapseCount;
+
+  document.getElementById('motivation-quote').textContent = quotes[days % quotes.length];
+  document.getElementById('reasons-text').value = DATA.reasons || "";
+
+  const headerTitle = document.getElementById('header-title');
+  const headerSub = document.getElementById('header-sub');
+  if(days === 0){
+    headerTitle.textContent = "Новое начало";
+    headerSub.textContent = "Первый день — самый важный. Вы уже здесь, и этого достаточно.";
+  } else {
+    headerTitle.textContent = "День " + days;
+    headerSub.textContent = "Каждый день без срыва — это выбор, который вы делаете снова.";
+  }
+
+  renderJournal();
+  renderCalendar();
+}
+
+function renderCalendar(){
+  const grid = document.getElementById('calendar-grid');
+  const relapseDates = new Set(
+    DATA.journal.filter(e=>e.type==='relapse').map(e=> new Date(e.date).toDateString())
+  );
+  const cells = [];
+  const today = new Date();
+  for(let i=29;i>=0;i--){
+    const d = new Date(today);
+    d.setDate(d.getDate()-i);
+    const dStr = d.toDateString();
+    const isFuture = d > today;
+    const isRelapse = relapseDates.has(dStr);
+    const startDate = new Date(DATA.streakStart);
+    const isBeforeStart = d < new Date(startDate.toDateString()) && !isRelapse;
+    let cls = 'cal-cell';
+    if(isRelapse) cls += ' relapse';
+    else if(!isBeforeStart) cls += ' ok';
+    cells.push(`<div class="${cls}" title="${d.toLocaleDateString('ru-RU')}"></div>`);
+  }
+  grid.innerHTML = cells.join('');
+}
+
+function renderJournal(){
+  const list = document.getElementById('journal-list');
+  if(!DATA.journal.length){
+    list.innerHTML = '<p class="muted">Записей пока нет.</p>';
+    return;
+  }
+  const sorted = [...DATA.journal].sort((a,b)=> new Date(b.date) - new Date(a.date));
+  list.innerHTML = sorted.slice(0,20).map(e=>{
+    const d = new Date(e.date);
+    const dateStr = d.toLocaleDateString('ru-RU', {day:'numeric', month:'short'}) + ', ' + d.toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'});
+    if(e.type === 'relapse'){
+      return `<div class="entry" style="border-left-color:var(--danger);">
+        <div class="meta">${dateStr} · <span class="relapse-tag">Срыв</span></div>
+        <div>${escapeHtml(e.context || '—')}</div>
+      </div>`;
+    }
+    if(e.type === 'lock'){
+      return `<div class="entry" style="border-left-color:var(--teal);">
+        <div class="meta">${dateStr} · <span style="color:var(--teal); font-weight:600;">Стоп-режим пройден</span></div>
+        <div>17 минут тяги пережиты без действия.</div>
+      </div>`;
+    }
+    return `<div class="entry">
+      <div class="meta">${dateStr}${e.intensity ? ' · Тяга: '+escapeHtml(e.intensity)+'/10' : ''}</div>
+      <div><strong>Ситуация:</strong> ${escapeHtml(e.situation||'—')}</div>
+      <div><strong>Мысль:</strong> ${escapeHtml(e.thought||'—')}</div>
+      <div><strong>Что сделал(а):</strong> ${escapeHtml(e.action||'—')}</div>
+    </div>`;
+  }).join('');
+}
+
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function goto(viewId){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(viewId).classList.add('active');
+  document.querySelectorAll('nav.bottom button').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`nav.bottom button[data-view="${viewId}"]`).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function openModal(id){ document.getElementById(id).classList.add('active'); }
+function closeModal(id){ document.getElementById(id).classList.remove('active'); }
+
+function saveJournalEntry(){
+  const situation = document.getElementById('j-situation').value.trim();
+  const thought = document.getElementById('j-thought').value.trim();
+  const intensity = document.getElementById('j-intensity').value.trim();
+  const action = document.getElementById('j-action').value.trim();
+  if(!situation && !thought && !action){
+    showToast('Добавьте хотя бы немного деталей');
+    return;
+  }
+  DATA.journal.push({type:'entry', date:new Date().toISOString(), situation, thought, intensity, action});
+  persist();
+  ['j-situation','j-thought','j-intensity','j-action'].forEach(id=>document.getElementById(id).value='');
+  closeModal('modal-journal');
+  showToast('Запись сохранена');
+  render();
+}
+
+function logRelapse(){
+  const context = document.getElementById('r-context').value.trim();
+  DATA.journal.push({type:'relapse', date:new Date().toISOString(), context});
+  DATA.relapseCount += 1;
+  DATA.streakStart = new Date().toISOString();
+  persist();
+  document.getElementById('r-context').value = '';
+  closeModal('modal-relapse');
+  showToast('Отмечено. Новый отсчёт начался прямо сейчас.');
+  render();
+}
+
+function confirmReset(){
+  if(confirm('Точно сбросить весь прогресс и записи? Это необратимо.')){
+    DATA = {streakStart: new Date().toISOString(), longestStreak:0, relapseCount:0, journal:[], reasons:"", lockCompletions:0};
+    persist();
+    render();
+    showToast('Данные сброшены');
+  }
+}
+
+function saveReasons(){
+  DATA.reasons = document.getElementById('reasons-text').value;
+  persist();
+  showToast('Сохранено');
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+// ---------- Breathing exercise (box breathing 4-4-4-4) ----------
+let breathInterval = null;
+function startBreathing(target){
+  target = target || 'breath-circle';
+  const circle = document.getElementById(target);
+  stopBreathing(target);
+  const phases = [
+    {label:'Вдох...', scale:1.35, dur:4000},
+    {label:'Задержите...', scale:1.35, dur:4000},
+    {label:'Выдох...', scale:0.8, dur:4000},
+    {label:'Задержите...', scale:0.8, dur:4000}
+  ];
+  let i = 0;
+  function step(){
+    const p = phases[i % phases.length];
+    circle.textContent = p.label;
+    circle.style.transition = 'transform 4s ease-in-out';
+    circle.style.transform = `scale(${p.scale})`;
+    i++;
+  }
+  step();
+  const handle = setInterval(step, 4000);
+  if(target==='breath-circle') breathInterval = handle; else lockBreathInterval = handle;
+}
+function stopBreathing(target){
+  target = target || 'breath-circle';
+  if(target==='breath-circle' && breathInterval){ clearInterval(breathInterval); breathInterval=null; }
+  if(target==='lock-breath' && lockBreathInterval){ clearInterval(lockBreathInterval); lockBreathInterval=null; }
+  const circle = document.getElementById(target);
+  circle.style.transform = 'scale(1)';
+  circle.textContent = target==='breath-circle' ? 'Нажмите «Начать»' : 'Дышите вместе со мной';
+}
+
+// ---------- 10-minute delay timer ----------
+let delayInterval = null;
+let delaySeconds = 600;
+function toggleDelayTimer(){
+  const btn = document.getElementById('delay-btn');
+  if(delayInterval){
+    clearInterval(delayInterval);
+    delayInterval = null;
+    btn.textContent = 'Запустить таймер';
+    delaySeconds = 600;
+    document.getElementById('delay-timer').textContent = '10:00';
+    return;
+  }
+  btn.textContent = 'Остановить';
+  delayInterval = setInterval(()=>{
+    delaySeconds--;
+    if(delaySeconds <= 0){
+      clearInterval(delayInterval);
+      delayInterval = null;
+      document.getElementById('delay-timer').textContent = '0:00';
+      btn.textContent = 'Запустить таймер';
+      showToast('Время вышло. Как вы себя чувствуете сейчас?');
+      delaySeconds = 600;
+      return;
+    }
+    const m = Math.floor(delaySeconds/60);
+    const s = delaySeconds%60;
+    document.getElementById('delay-timer').textContent = m + ':' + (s<10?'0':'')+s;
+  },1000);
+}
+
+// ---------- HALT selector ----------
+document.querySelectorAll('.halt-item').forEach(item=>{
+  item.addEventListener('click', ()=>{
+    item.classList.toggle('selected');
+    const selected = [...document.querySelectorAll('.halt-item.selected')].map(i=>i.dataset.h);
+    const hint = document.getElementById('halt-hint');
+    if(!selected.length){ hint.textContent=''; return; }
+    const tips = {
+      "Голоден": "Поешьте что-то простое прямо сейчас — низкий сахар в крови сильно снижает самоконтроль.",
+      "Злюсь / раздражён": "Дайте раздражению выход физически: быстрая ходьба, отжимания, даже просто громко выдохните.",
+      "Одиноко": "Напишите или позвоните одному человеку прямо сейчас — не обязательно объяснять зачем.",
+      "Устал": "Тяга на усталости особенно сильна. Если можно — просто лягте спать, даже раньше обычного."
+    };
+    hint.innerHTML = selected.map(s=>`<strong>${s}:</strong> ${tips[s]}`).join('<br><br>');
+  });
+});
+
+// ---------- Lock mode (17 minutes) ----------
+let lockBreathInterval = null;
+let lockInterval = null;
+let lockSecondsLeft = 17*60;
+let lockMsgIndex = 0;
+const lockMessages = [
+  "Тяга уже поднимается к пику. Это нормально и временно. Просто оставайтесь здесь.",
+  "Вы не обязаны ничего с этим делать. Просто замечайте ощущение, как погоду за окном.",
+  "Пик обычно проходит к 15–20 минуте. Вы почти на месте.",
+  "Тело хочет быстрого облегчения. Вы можете дать ему просто подождать.",
+  "Вспомните одну причину, по которой вы здесь, а не там.",
+  "Волна уже начинает спадать, даже если пока не ощущается.",
+  "Вы делаете сейчас то, что через месяц будет казаться самым важным решением дня."
+];
+let lockHistoryPushed = false;
+
+function startLock(){
+  lockSecondsLeft = 17*60;
+  document.getElementById('lock-done-content').style.display = 'none';
+  document.getElementById('lock-active-content').style.display = 'block';
+  document.getElementById('lock-screen').classList.add('active');
+  updateLockTimerDisplay();
+  startBreathing('lock-breath');
+  lockMsgIndex = 0;
+  document.getElementById('lock-message').textContent = lockMessages[0];
+
+  // Если приложение запущено внутри Android-обёртки (см. MainActivity.kt) —
+  // включаем системный Screen Pinning через нативный мост.
+  if(window.AndroidLock && window.AndroidLock.lock){
+    try{ window.AndroidLock.lock(); }catch(e){ console.log(e); }
+  }
+
+  // Затрудняем случайный выход в веб-версии
+  window.onbeforeunload = function(e){
+    e.preventDefault();
+    e.returnValue = 'Стоп-режим ещё не завершён.';
+    return e.returnValue;
+  };
+  try{
+    history.pushState({lock:true}, '');
+    lockHistoryPushed = true;
+    window.addEventListener('popstate', blockBack);
+  }catch(e){}
+  try{
+    if(document.documentElement.requestFullscreen){
+      document.documentElement.requestFullscreen().catch(()=>{});
+    }
+  }catch(e){}
+
+  lockInterval = setInterval(()=>{
+    lockSecondsLeft--;
+    updateLockTimerDisplay();
+    if(lockSecondsLeft>0 && lockSecondsLeft % 90 === 0){
+      lockMsgIndex = (lockMsgIndex+1) % lockMessages.length;
+      document.getElementById('lock-message').textContent = lockMessages[lockMsgIndex];
+    }
+    if(lockSecondsLeft<=0){
+      completeLock();
+    }
+  },1000);
+}
+
+function blockBack(){
+  if(document.getElementById('lock-screen').classList.contains('active')){
+    history.pushState({lock:true}, '');
+  }
+}
+
+function updateLockTimerDisplay(){
+  const m = Math.floor(lockSecondsLeft/60);
+  const s = lockSecondsLeft%60;
+  document.getElementById('lock-timer').textContent = m + ':' + (s<10?'0':'') + s;
+  const pct = 100 - Math.round((lockSecondsLeft/(17*60))*100);
+  document.getElementById('lock-progress-fill').style.width = pct + '%';
+}
+
+function attemptExitLock(){
+  const elapsedMin = Math.floor((17*60 - lockSecondsLeft)/60);
+  const ok = confirm('Уверены, что хотите прервать? Вы уже продержались ' + elapsedMin + ' мин. Тяга почти всегда спадает сама — обычно к 15–20 минуте.');
+  if(ok){
+    teardownLock();
+    showToast('Стоп-режим прерван. Это тоже нормально — вы всё равно выиграли время.');
+  }
+}
+
+function completeLock(){
+  clearInterval(lockInterval);
+  lockInterval = null;
+  stopBreathing('lock-breath');
+  document.getElementById('lock-active-content').style.display = 'none';
+  document.getElementById('lock-done-content').style.display = 'block';
+  DATA.lockCompletions = (DATA.lockCompletions||0) + 1;
+  DATA.journal.push({type:'lock', date:new Date().toISOString()});
+  persist();
+}
+
+function finishLock(){
+  teardownLock();
+  render();
+  showToast('Отличная работа. Это засчитывается.');
+}
+
+function teardownLock(){
+  clearInterval(lockInterval); lockInterval = null;
+  stopBreathing('lock-breath');
+  document.getElementById('lock-screen').classList.remove('active');
+  window.onbeforeunload = null;
+  window.removeEventListener('popstate', blockBack);
+  try{ if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }catch(e){}
+  if(window.AndroidLock && window.AndroidLock.unlock){
+    try{ window.AndroidLock.unlock(); }catch(e){ console.log(e); }
+  }
+}
+
+window.addEventListener('DOMContentLoaded', loadData);
+</script>
+</body>
+</html>
